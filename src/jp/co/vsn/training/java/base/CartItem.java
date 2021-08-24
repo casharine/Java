@@ -1,7 +1,7 @@
 package jp.co.vsn.training.java.base;
 
 /**
- * ショッピングカート内の商品を表すクラスです。集約（Itemの部分）
+ * ショッピングカート内の商品を表すクラスです。（集約：全体、部分（Item)のインスタンスをメンバ変数として持っている）Cartの全体でもある）
  *
  * @author XXXXXXX
  */
@@ -110,8 +110,8 @@ public class CartItem {
 
 
     	CartItem cItem =  new CartItem(item, 3);
-    		cItem.toString();
-    		System.out.println();
+			cItem.addAmount(1);
+			System.out.println(cItem);
 
     }
 }

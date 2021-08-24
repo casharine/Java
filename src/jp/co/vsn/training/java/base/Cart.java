@@ -1,12 +1,13 @@
 package jp.co.vsn.training.java.base;
 
+import java.util.ArrayList;
 // itterator List Map
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 /**
- * ショッピングカートを表すクラスです。
+ * ショッピングカートを表すクラスです。（集約：全体、部分（CartItem)のインスタンスをメンバ変数として持っている）
  *
  * @author XXXXXXXa
  */
@@ -42,10 +43,11 @@ public class Cart {
     	}
     	//カートデータハッシュマップに追加する（itemクラスのitemIDをキーに設定し、
     	//今回の引数を使った新たなカートアイテムを設定する）
-    	if ( hasItem (item.getItemId())) {
-        	this.addAmount(null, amount);
-    	}
+    	else if ( hasItem (item.getItemId())) {
+        	this.addAmount(item.getItemId(), amount);
+    	}else {
     	cartData. put( item.getItemId(), new CartItem(item, amount) );
+    	}
     }
 
     /**
@@ -75,7 +77,12 @@ public class Cart {
      * @return カート内の商品の数量
      */
     public int getAmount(Integer itemId) {
-    	return this;
+    	if(hasItem(itemId)) {
+    		return cartData.get(itemId).getAmount();
+    	}
+    	else {
+    		return -1;
+    	}
     }
 
     /**
@@ -90,6 +97,12 @@ public class Cart {
      * @throws IllegalArgumentException amount が負数の場合
      */
     public void setAmount(Integer itemId, int amount) {
+    	if (amount < 0) {
+    		throw new IllegalArgumentException("引数 amount が負数です。");
+    	}
+    	if(hasItem(itemId)) {
+    		cartData.get(itemId).setAmount(amount);
+    	}
 
     }
 
@@ -110,7 +123,10 @@ public class Cart {
      * @return カート内のすべての商品IDのイテレータ
      */
     public Iterator<Integer> itemIdIterator() {
-        return null;
+    	Iterator<Integer> keyItr = cartData.keySet().iterator();
+//    	 while(keyItrqq.hasNext()) {
+//    		 Integer itr = (Integer) keyItr.next();
+    	return keyItr;
     }
 
     /**
@@ -119,7 +135,8 @@ public class Cart {
      * @return カート内の商品のリスト
      */
     public List<CartItem> getCartItemList() {
-        return null;
+    	List<CartItem> valList = new ArrayList<CartItem>(cartData.values());
+    	return valList;
     }
 
     /**
@@ -131,6 +148,9 @@ public class Cart {
      * @return 商品IDのカート内の商品情報
      */
     public CartItem getCartItem(Integer itemId) {
+    	if(hasItem(itemId)) {
+    		return cartData.get(itemId);
+    	}
         return null;
     }
 
@@ -140,14 +160,19 @@ public class Cart {
      * @return カート内商品の総合計金額
      */
     public int calcTotalSum() {
-        return 0;
+    	int cts = 0;
+    	for( CartItem cartItem : this.getCartItemList() ) {
+    		cts += cartItem.calcTotalPrice();
+//    	cts += this.getCartItemList().get(hItr.next()).calcTotalPrice();
+    	}
+    	return cts;
     }
 
     /**
      * カートの内容をクリアします。
      */
     public void clear() {
-
+    	cartData.clear();
     }
 
     /**
@@ -157,7 +182,7 @@ public class Cart {
      * @return カート内に追加した商品の数
      */
     public int size() {
-        return 0;
+    	return cartData.size();
     }
 
     /**
@@ -167,7 +192,10 @@ public class Cart {
      * @param itemId 商品ID
      */
     public void removeItem(Integer itemId) {
-
+    	if(hasItem(itemId)) {
+    	// 商品IDが存在する時 存在するはずのitemIdを使用しインスタンスを取得。CartItemクラスのメソッドを使用する
+    		cartData.remove(itemId);
+    	}
     }
 
     /**
@@ -175,8 +203,33 @@ public class Cart {
      * @param args
      */
     public static void main(String[] args) {
+   		 Item item = new Item();
+   	        item.setItemId(10);
+   	        item.setItemname("水");
+   	        item.setPrice(100);
+   	        item.setCategoryCode("10");
+   	        item.setCategoryName("飲料");
+   	        item.setExplanation("軟水");
+   	        item.setImageName("wator.jpg");
+   	        item.setOriginalId("W-123");
 
-    	HashMap<キーのデータ型,値のデータ型> 変数名 = new HashMap<>();
+   	     Item item2 = new Item();
+	        item2.setItemId(20);
+	        item2.setItemname("お茶");
+	        item2.setPrice(200);
+	        item2.setCategoryCode("10");
+	        item2.setCategoryName("飲料");
+	        item2.setExplanation("軟水");
+	        item2.setImageName("wator.jpg");
+	        item2.setOriginalId("W-123");
+
+	    Cart cart = new Cart();
+   	        cart.add(item, 3);
+   	        cart.add(item2, 5);
+   	        System.out.println(cart.calcTotalSum());
+
+
+
 
 
     }

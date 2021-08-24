@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 
-import jp.co.vsn.training.java.base.DirUtil;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import jp.co.vsn.training.java.base.DirUtil;
 
 public class DirUtilTest {
 
@@ -35,7 +35,7 @@ public class DirUtilTest {
     public void testRemoveNull() {
         DirUtil.remove(null);
     }
-    
+
     @Test(expected=java.lang.IllegalArgumentException.class)
     public void testRemoveFile() {
     	File f = new File("tmp.txt");
@@ -43,13 +43,13 @@ public class DirUtilTest {
 	    	f.createNewFile();
 	        DirUtil.remove(f);
     	} catch (IOException ioe) {
-    		
+
     	} finally {
     		if (f.exists()) {
     			f.delete();
     		}
     	}
-    }    
+    }
 
     // ヘルパーメソッド
     private File createDir() {
