@@ -35,8 +35,8 @@ public class DirUtil {
     	}
     	dir.delete();
 		System.out.println("フォルダを削除しました");
+	}
 
-    }
 
     /**
      * 動作確認用の実行メソッドです。

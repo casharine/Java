@@ -1,6 +1,9 @@
 package jp.co.vsn.training.java.base;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * アンケートの回答数を集計するクラスです。<br/>
@@ -39,7 +42,7 @@ public class EnqueteAnswer {
      * 新しいアンケート回答集計オブジェクトを生成します。
      */
     public EnqueteAnswer() {
-
+    	this.ansCountMap = new LinkedHashMap<>();
     }
 
     /**
@@ -52,6 +55,14 @@ public class EnqueteAnswer {
      * @throws NullPointerException 指定した回答が null のとき
      */
     public void add(String ans) {
+    	if ( ans == null) {
+    		throw new NullPointerException("解答がnullです。");
+    	}
+    	else if ( contains (ans)) {
+    		ansCountMap.put(ans, ansCountMap.get(ans).inc());
+    	}else {
+			ansCountMap. put( ans, new Counter(1, 1));
+    	}
 
     }
 
@@ -65,7 +76,10 @@ public class EnqueteAnswer {
      * @throws NullPointerException 指定した回答が null のとき
      */
     public boolean contains(String ans) {
-    	return false;
+    	if ( ans == null) {
+    		throw new NullPointerException("解答がnullです。");
+    	}
+    	return ansCountMap.containsKey(ans);
     }
 
     /**
@@ -77,7 +91,11 @@ public class EnqueteAnswer {
      * @throws NullPointerException 指定回答が null のとき
      */
     public void remove(String ans) {
-
+    	if( ans == null) {
+    		throw new NullPointerException("ヌルぽ");
+    	}else {
+    	ansCountMap.remove(ans);
+    	}
     }
 
     /**
@@ -91,7 +109,14 @@ public class EnqueteAnswer {
      * @throws NullPointerException 指定回答が null のとき
      */
     public int getCount(String ans) {
-    	return 0;
+    	if( ans == null) {
+    		throw new NullPointerException("ヌルぽ");
+    	}
+    	else if(contains(ans) == false ) {
+    		throw new IllegalArgumentException("指定解答が存在しません");
+		} else {
+    	return ansCountMap.get(ans).getCount();
+		}
     }
 
     /**
@@ -106,8 +131,15 @@ public class EnqueteAnswer {
      * @throws IllegalArgumentException 設定回答数が負数のとき
      */
     public void setCount(String ans, int count) {
+    	if( ans == null) {
+    		throw new NullPointerException("ansがnullです");
+		} else if(count < 0) {
+    		throw new IllegalArgumentException("引数 count が負数です。");
+		} else {
+			ansCountMap. put( ans, new Counter(count, 1));
+		}
+	}
 
-    }
 
     /**
      * 回答リストを返します。<br/>
@@ -116,7 +148,13 @@ public class EnqueteAnswer {
      * @return 回答リスト
      */
     public List<String> getAnswerList() {
-        return null;
+    	if(ansCountMap.size() == 0) {
+    		List<String>list = new ArrayList<String>();
+    		return list;
+    	} else {
+	    	List<String>list = new ArrayList<String>(ansCountMap.keySet());
+	    	return list;
+    	}
     }
 
     /**
@@ -124,7 +162,11 @@ public class EnqueteAnswer {
      * @return 回答の総数
      */
     public int total() {
-        return 0;
+    	int ansTotal = 0;
+    	for(String key : getAnswerList()) {
+    		ansTotal += getCount(key);
+    	}
+    		return  ansTotal;
     }
 
     /**
@@ -142,7 +184,16 @@ public class EnqueteAnswer {
      */
     @Override
     public String toString() {
-    	return null;
+    	if(ansCountMap.size() == 0) {
+    		return "none";
+    	}else {
+    		String str = "";
+    		for(String key : getAnswerList()) {
+    			str += key + "#" +  ansCountMap.get(key).getCount() + ":";
+    		}
+    		str = str.substring(0, str.length()-1);
+    		return str;
+    	}
     }
 
     /**

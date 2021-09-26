@@ -23,7 +23,6 @@ public class Counter extends Exception {
 
     /**
      * カウント数、変化量をそれぞれ指定した値で初期化したCounterオブジェクトを構築します。
-     *
      * @param count カウント数
      * @param unit 変化量
      */
@@ -42,7 +41,7 @@ public class Counter extends Exception {
     }
 
 
-    /**
+    /**sw
      * 現在の変化量を取得します。
      *
      * @return 変化量
@@ -68,8 +67,6 @@ public class Counter extends Exception {
      * @return 自分自身のCounterインスタンス,計算結果を返すわけではない
      *
      */
-
-
     public Counter inc() {
     	this.count += this.unit;
     	return this;
